@@ -77,7 +77,7 @@
       - postfix start
       - postfix enable
       - dovecot start
-      - dovecot ebable
+      - dovecot enable
  
     handlers:
     - include: hand.yml
