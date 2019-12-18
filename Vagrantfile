@@ -13,6 +13,7 @@ MACHINES = {
     :box_name => "centos/7",
     :ip_addr => "10.0.0.2",
     :memory => "256",
+    :ansible => "playbook.yml"
       }
 }
 
