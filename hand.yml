@@ -1,0 +1,19 @@
+--- 
+  - name: postfix start
+    systemd:
+      name: postfix
+      state: started
+  - name: dovecot start
+    systemd:
+      name: dovecot
+      state: started
+  - name: postfix enable
+    systemd:
+      name: postfix
+      enabled: yes
+  - name: dovecot enable
+    systemd:
+      name: dovecot
+      enable: yes
+
+...

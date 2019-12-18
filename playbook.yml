@@ -1,0 +1,123 @@
+---
+  
+  - name: install postfix and dovecot
+    hosts: server
+    gather_facts: yes
+    remote_user: vagrant
+    become: true
+   
+    tasks:
+    - name: include default step variables
+      include_vars: vars.yml
+    - name: install packages
+      yum: 
+        name: "{{ packages }}"
+        state: present
+
+    - name: enable ntpd
+      systemd:
+        name: ntpd
+        enabled: true
+      notify: restart ntpd
+
+    - name: set timezone
+      timezone:
+        name: Europe/Moscow
+
+    - name: insert name hosts
+      lineinfile:
+        path: /etc/hosts
+        line: 10.0.0.1 server.otus.local
+        state: present
+
+    - name: insert name hosts
+      lineinfile:
+        path: /etc/hosts
+        line: 10.0.0.1 otus.local
+        state: present
+   
+    - name: copy config postfix
+      copy: 
+        src: main.cf
+        dest: /etc/postfix/main.cf
+   
+    - name: insert name hosts
+      lineinfile:
+        path: /etc/hosts
+        line: 10.0.0.2 client1.otus.local
+        state: present
+
+    - name: create vmail group
+      group:
+        name: vmail
+        gid: 5000
+
+    - name: create vmail user
+      user:
+        name: vmail
+        group: vmail
+        uid: 5000
+        home: /var/mail
+
+    - name: set secure permissions and ownership on /etc/dovecot
+      file:
+        path: /etc/dovecot
+        state: directory
+        owner: vmail
+        group: dovecot
+        mode: o-rwx
+
+    - name: create /var/mail/vhosts
+      file:
+        path: /var/mail/vhosts
+        state: directory
+        owner: vmail
+        group: vmail
+      notify:
+      - postfix start
+      - postfix enable
+      - dovecot start
+      - dovecot ebable
+ 
+    handlers:
+    - include: hand.yml
+
+
+
+ 
+  - hosts: client1
+    become: yes
+    tasks:
+    - name: include default step variables
+      include_vars: vars.yml
+
+    - name: install packages
+      yum:
+        name: "{{ clientpackages }}"
+        state: present
+
+    - name: insert name hosts
+      lineinfile:
+        path: /etc/hosts
+        line: 10.0.0.1 server.otus.local
+        state: present
+
+    - name: insert name hosts
+      lineinfile:
+        path: /etc/hosts
+        line: 10.0.0.1 otus.local
+        state: present
+
+    - name: send mail
+      mail:
+        host: 10.0.0.1
+        port: 25
+        to: vagrant@otus.local
+        subject: Test mail to server
+        body: Are you get a mail?
+
+
+
+
+
+...

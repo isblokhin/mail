@@ -1,0 +1,15 @@
+---
+  packages:
+  - ntp
+  - epel-release
+  - nano
+  - mc
+  - postfix
+  - dovecot
+  - telnet
+  clientpackages:
+  - nano
+  - telnet
+  - mc
+  - python
+  - postfix
