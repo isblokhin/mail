@@ -44,7 +44,7 @@
     - name: insert name hosts
       lineinfile:
         path: /etc/hosts
-        line: 10.0.0.2 client1.otus.local
+        line: 10.0.0.2 client1.otus.local client1
         state: present
 
     - name: create vmail group
@@ -95,6 +95,10 @@
       yum:
         name: "{{ clientpackages }}"
         state: present
+      notify:
+      - postfix start
+      - postfix enable
+
 
     - name: insert name hosts
       lineinfile:
