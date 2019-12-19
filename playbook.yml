@@ -99,6 +99,9 @@
       - postfix start
       - postfix enable
 
+    handlers:
+    - include: hand.yml
+
 
     - name: insert name hosts
       lineinfile:
