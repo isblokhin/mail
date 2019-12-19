@@ -99,10 +99,6 @@
       - postfix start
       - postfix enable
 
-    handlers:
-    - include: hand.yml
-
-
     - name: insert name hosts
       lineinfile:
         path: /etc/hosts
@@ -123,8 +119,10 @@
         subject: Test mail to server
         body: Are you get a mail?
 
+    handlers:
+    - include: hand.yml
 
-
+    
 
 
 ...
