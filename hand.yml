@@ -14,7 +14,7 @@
   - name: dovecot enable
     systemd:
       name: dovecot
-      enable: yes
+      enabled: yes
   - name: restart ntpd
     systemd:
       name: ntpd
